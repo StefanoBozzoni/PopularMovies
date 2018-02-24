@@ -55,8 +55,8 @@ public class JsonUtils {
         }
     }
 
-    final static String MOVIEDB_BASE_URL =
-            "http://api.themoviedb.org/3/movie/";
+    public final static String MOVIEDB_BASE_URL = "http://api.themoviedb.org/3/movie/";
+    public final static String POSTER_BASE_URL  = "http://image.tmdb.org/t/p/w500/";
 
     final static String PARAM_QUERY = "api_key";
     final static String API_KEY = "759edfb4826fc71c6b51006513f19743";
