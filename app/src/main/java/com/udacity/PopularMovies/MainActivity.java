@@ -1,5 +1,6 @@
 package com.udacity.PopularMovies;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.udacity.PopularMovies.model.MovieItem;
 import com.udacity.PopularMovies.utils.JsonUtils;
@@ -20,12 +22,14 @@ import java.net.URL;
 
 
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<MovieItem[]> {
+public class MainActivity extends AppCompatActivity
+         implements PopularMovieAdapter.PopularMovieAdapterOnClickHandler,
+                    LoaderManager.LoaderCallbacks<MovieItem[]> {
 
     RecyclerView mRecyclerView;
     PopularMovieAdapter mPopularMovieAdapter;
 
-    private static final int MOVIEDB_SEARCH_LOADER_ID = 23;
+    private static final int MOVIEDB_SEARCH_LOADER_ID = 24;
     private static final String SEARCH_QUERY_URL_EXTRA="QUERY";
     private static final String MOST_POPULAR_QUERY_TAG="popular";
     private static final String TOP_RATED_QUERY_TAG="top_rated";
@@ -36,24 +40,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
 
         String movieDBQuery =JsonUtils.buildUrl("popular").toString();
-        Bundle queryBundle = new Bundle();
-        queryBundle.putString(SEARCH_QUERY_URL_EXTRA, movieDBQuery);
+        //Bundle queryBundle = new Bundle();
+        //queryBundle.putString(SEARCH_QUERY_URL_EXTRA, movieDBQuery);
 
         //Set the recycler view
         mRecyclerView = (RecyclerView) findViewById(R.id.movies_rv);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mPopularMovieAdapter = new PopularMovieAdapter();
+
+        mPopularMovieAdapter = new PopularMovieAdapter(this);
         mRecyclerView.setAdapter(mPopularMovieAdapter); /* Setting the adapter attaches it to the RecyclerView in our layout. */
 
         LoaderManager loaderManager = getSupportLoaderManager();
-        loaderManager.initLoader(MOVIEDB_SEARCH_LOADER_ID, null, MainActivity.this);
-        //loaderManager.getLoader(MOVIEDB_SEARCH_LOADER_ID).forceLoad();
-        loaderManager.getLoader(MOVIEDB_SEARCH_LOADER_ID).onContentChanged();
-
-        //getSupportLoaderManager().restartLoader(MOVIEDB_SEARCH_LOADER, null, this);
-
+        loaderManager.initLoader(MOVIEDB_SEARCH_LOADER_ID, null, MainActivity.this).forceLoad();
 
         /*
         String[] sandwiches = getResources().getStringArray(R.array.sandwich_names);
@@ -72,26 +72,29 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
-    /*
     private void launchDetailActivity(int position) {
         Intent intent = new Intent(this, DetailActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra(DetailActivity.EXTRA_POSITION, position);
         startActivity(intent);
     }
-    */
 
+
+    @SuppressLint("StaticFieldLeak")
     @Override
     public Loader<MovieItem[]> onCreateLoader(int id, final Bundle args) {
         return new AsyncTaskLoader<MovieItem[]>(this) {
             MovieItem[] mMovies = null;
             @Override
             protected void onStartLoading() {
+                forceLoad();
+                /*
                 if (mMovies != null) {
                     deliverResult(mMovies);
                 } else {
                     forceLoad();
                 }
+                */
             }
 
             @Override
@@ -132,14 +135,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             ListView listView = findViewById(R.id.sandwiches_listview);
             listView.setAdapter(adapter);
             */
-            mPopularMovieAdapter.setMoviesData(movies);
-            loader.onContentChanged();
-        }
 
+            mPopularMovieAdapter.setMoviesData(movies);
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<MovieItem[]> loader) {
 
+    }
+    @Override
+    public void onClick(MovieItem aMovie) {
+        //Toast.makeText(this, "ciao", Toast.LENGTH_SHORT).show();
     }
 }
