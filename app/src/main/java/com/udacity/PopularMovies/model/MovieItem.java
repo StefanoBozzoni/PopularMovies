@@ -1,17 +1,23 @@
 package com.udacity.PopularMovies.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.preference.ListPreference;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MovieItem {
+public class MovieItem implements Parcelable {
     private int vote_count;
     private int id;
     private boolean video;
     private float vote_avarage;
     private int popularity;
     private String poster_path;
+
+
     private String original_language;
     private String original_title;
     private List<Integer> genre_ids;
@@ -144,4 +150,57 @@ public class MovieItem {
     public void setRelease_date(Date release_date) {
         this.release_date = release_date;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.vote_count);
+        dest.writeInt(this.id);
+        dest.writeByte(this.video ? (byte) 1 : (byte) 0);
+        dest.writeFloat(this.vote_avarage);
+        dest.writeInt(this.popularity);
+        dest.writeString(this.poster_path);
+        dest.writeString(this.original_language);
+        dest.writeString(this.original_title);
+        dest.writeList(this.genre_ids);
+        dest.writeString(this.backdrop_path);
+        dest.writeByte(this.adult ? (byte) 1 : (byte) 0);
+        dest.writeString(this.overview);
+        dest.writeLong(this.release_date != null ? this.release_date.getTime() : -1);
+    }
+
+    protected MovieItem(Parcel in) {
+        this.vote_count = in.readInt();
+        this.id = in.readInt();
+        this.video = in.readByte() != 0;
+        this.vote_avarage = in.readFloat();
+        this.popularity = in.readInt();
+        this.poster_path = in.readString();
+        this.original_language = in.readString();
+        this.original_title = in.readString();
+        this.genre_ids = new ArrayList<Integer>();
+        in.readList(this.genre_ids, Integer.class.getClassLoader());
+        this.backdrop_path = in.readString();
+        this.adult = in.readByte() != 0;
+        this.overview = in.readString();
+        long tmpRelease_date = in.readLong();
+        this.release_date = tmpRelease_date == -1 ? null : new Date(tmpRelease_date);
+    }
+
+    public static final Parcelable.Creator<MovieItem> CREATOR = new Parcelable.Creator<MovieItem>() {
+        @Override
+        public MovieItem createFromParcel(Parcel source) {
+            return new MovieItem(source);
+        }
+
+        @Override
+        public MovieItem[] newArray(int size) {
+            return new MovieItem[size];
+        }
+    };
 }

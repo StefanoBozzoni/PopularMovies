@@ -14,11 +14,13 @@
         <activity android:name="com.udacity.PopularMovies.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name="com.udacity.PopularMovies.DetailActivity"
+                  android:launchMode="singleTop"
+                  android:parentActivityName="com.udacity.PopularMovies.MainActivity" />
+        <activity android:name="com.udacity.PopularMovies.MovieDetailActivity"
                   android:launchMode="singleTop"
                   android:parentActivityName="com.udacity.PopularMovies.MainActivity" />
     </application>

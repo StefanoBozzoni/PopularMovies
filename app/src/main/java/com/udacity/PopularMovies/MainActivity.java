@@ -9,6 +9,9 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,8 +22,6 @@ import com.udacity.PopularMovies.model.MovieItem;
 import com.udacity.PopularMovies.utils.JsonUtils;
 
 import java.net.URL;
-
-
 
 public class MainActivity extends AppCompatActivity
          implements PopularMovieAdapter.PopularMovieAdapterOnClickHandler,
@@ -39,9 +40,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String movieDBQuery =JsonUtils.buildUrl("popular").toString();
-        //Bundle queryBundle = new Bundle();
-        //queryBundle.putString(SEARCH_QUERY_URL_EXTRA, movieDBQuery);
+        Bundle queryBundle = new Bundle();
+        queryBundle.putString(SEARCH_QUERY_URL_EXTRA, MOST_POPULAR_QUERY_TAG);
 
         //Set the recycler view
         mRecyclerView = (RecyclerView) findViewById(R.id.movies_rv);
@@ -99,8 +99,20 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public MovieItem[] loadInBackground() {
-                URL MovieDBURL = JsonUtils.buildUrl(MOST_POPULAR_QUERY_TAG);
+                String tipoQuery;
+                if (args!=null)
+                    tipoQuery = args.getString(SEARCH_QUERY_URL_EXTRA);
+                else
+                    tipoQuery = MOST_POPULAR_QUERY_TAG;
+
+                URL MovieDBURL;
+                if (tipoQuery.equals(MOST_POPULAR_QUERY_TAG))
+                    MovieDBURL = JsonUtils.buildUrl(MOST_POPULAR_QUERY_TAG);
+                else
+                    MovieDBURL = JsonUtils.buildUrl(TOP_RATED_QUERY_TAG);
+
                 try {
+
                     String jsonMovieDBResponse = JsonUtils.getResponseFromHttpUrl(MovieDBURL);
 
                     //MovieItem[] JsonMovies = JsonUtils.getMovies(MainActivity.this, jsonMovieDBResponse);
@@ -120,6 +132,13 @@ public class MainActivity extends AppCompatActivity
                 super.deliverResult(movies);
             }
         };
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater=getMenuInflater();
+        menuInflater.inflate(R.menu.main_activity_menu,menu);
+        return true;
     }
 
     @Override
@@ -146,6 +165,28 @@ public class MainActivity extends AppCompatActivity
     }
     @Override
     public void onClick(MovieItem aMovie) {
-        //Toast.makeText(this, "ciao", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        intent.putExtra("ARRAY",aMovie);
+        //intent.putExtra("ARRAY","ciao");
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if ((item.getItemId()==R.id.topRated) || (item.getItemId()==R.id.mostPopular)) {
+            LoaderManager loaderManager=getSupportLoaderManager();
+            Bundle queryBundle = new Bundle();
+
+            if (item.getItemId()==R.id.topRated)
+                queryBundle.putString(SEARCH_QUERY_URL_EXTRA, TOP_RATED_QUERY_TAG);
+            else
+                queryBundle.putString(SEARCH_QUERY_URL_EXTRA, MOST_POPULAR_QUERY_TAG);
+
+            mPopularMovieAdapter.setMoviesData(null);
+            loaderManager.restartLoader(MOVIEDB_SEARCH_LOADER_ID, queryBundle, MainActivity.this);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
