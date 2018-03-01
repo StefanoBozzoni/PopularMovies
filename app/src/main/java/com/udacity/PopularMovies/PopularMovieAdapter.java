@@ -1,7 +1,8 @@
 package com.udacity.PopularMovies;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+//import android.support.v7.widget.RecyclerView;
+import com.udacity.PopularMovies.MyRecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +18,14 @@ import com.udacity.PopularMovies.utils.JsonUtils;
 
 import java.net.URL;
 
-public class PopularMovieAdapter extends RecyclerView.Adapter<PopularMovieAdapter.PMViewHolder> {
+public class PopularMovieAdapter extends MyRecyclerView.Adapter<PopularMovieAdapter.PMViewHolder> {
 
     private MovieItem[] moviesData;
     private Context rcContext;
-
-
     private final PopularMovieAdapterOnClickHandler mClickHandler;
 
     public interface PopularMovieAdapterOnClickHandler {
-        void onClick(MovieItem aMovie);
+        void onClick(View v, MovieItem aMovie);
     }
 
     public PopularMovieAdapter(PopularMovieAdapterOnClickHandler clickHandler) {
@@ -34,7 +33,7 @@ public class PopularMovieAdapter extends RecyclerView.Adapter<PopularMovieAdapte
     }
 
 
-    public class PMViewHolder extends    RecyclerView.ViewHolder
+    public class PMViewHolder extends    MyRecyclerView.ViewHolder
                               implements View.OnClickListener,
                                          View.OnLongClickListener   {
 
@@ -53,7 +52,7 @@ public class PopularMovieAdapter extends RecyclerView.Adapter<PopularMovieAdapte
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             MovieItem thisMovie = moviesData[adapterPosition];
-            mClickHandler.onClick(thisMovie);
+            mClickHandler.onClick(v,thisMovie);
         }
 
 
@@ -86,7 +85,10 @@ public class PopularMovieAdapter extends RecyclerView.Adapter<PopularMovieAdapte
             String url = JsonUtils.POSTER_BASE_URL + moviesData[position].getPoster_path();   //   moviesData[position]
 
             if (holder.movieImage!=null) {
-                Picasso.with(rcContext).load(url).into(holder.movieImage);
+                Picasso.with(rcContext).load(url)
+                        //.placeholder(R.drawable.ic_error)
+                        .error(R.drawable.ic_error)
+                        .into(holder.movieImage);
             }
         }
     }

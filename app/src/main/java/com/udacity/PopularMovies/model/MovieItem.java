@@ -2,22 +2,35 @@ package com.udacity.PopularMovies.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.preference.ListPreference;
+import android.support.annotation.Nullable;
 
-import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MovieItem implements Parcelable {
+    public static final String id_Json                ="id";
+    public static final String vote_count_Json        ="vote_count";
+    public static final String vote_average_Json      ="vote_average";
+    public static final String video_Json             ="video";
+    public static final String popularity_Json        ="popularity";
+    public static final String poster_path_Json       ="poster_path";
+    public static final String original_language_Json ="original_language";
+    public static final String original_title_Json    ="original_title";
+    public static final String genre_ids_Json         ="genre_ids";
+    public static final String backdrop_path_Json     ="backdrop_path";
+    public static final String adult_Json             ="adult";
+    public static final String overview_Json          ="overview";
+    public static final String release_date_Json      ="release_date";
+
     private int vote_count;
     private int id;
     private boolean video;
-    private float vote_avarage;
+    private float vote_average;
     private int popularity;
     private String poster_path;
-
-
     private String original_language;
     private String original_title;
     private List<Integer> genre_ids;
@@ -30,11 +43,12 @@ public class MovieItem implements Parcelable {
 
     };
 
-    public MovieItem(int id, int vote_count, boolean video, int popularity, String poster_path,
+    public MovieItem(int id, int vote_count, float vote_average, boolean video, int popularity, String poster_path,
                      String original_language, String original_title, List<Integer> genre_ids,
                      String backdrop_path, boolean adult, String overview, Date release_date) {
         this.id=id;
         this.vote_count    =vote_count;
+        this.vote_average =vote_average;
         this.video         =video;
         this.popularity    =popularity;
         this.poster_path   =poster_path;
@@ -71,12 +85,12 @@ public class MovieItem implements Parcelable {
         this.video = video;
     }
 
-    public float getVote_avarage() {
-        return vote_avarage;
+    public float getVote_average() {
+        return vote_average;
     }
 
-    public void setVote_avarage(float vote_avarage) {
-        this.vote_avarage = vote_avarage;
+    public void setVote_average(float vote_average) {
+        this.vote_average = vote_average;
     }
 
     public int getPopularity() {
@@ -103,6 +117,7 @@ public class MovieItem implements Parcelable {
         this.original_language = original_language;
     }
 
+    @Nullable
     public String getOriginal_title() {
         return original_title;
     }
@@ -147,6 +162,17 @@ public class MovieItem implements Parcelable {
         return release_date;
     }
 
+    public String getRelease_date_printable() {
+        SimpleDateFormat sdfr = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        try {
+            return sdfr.format(getRelease_date());
+        } catch (Exception ex ){
+            ex.printStackTrace();
+            return null;
+        }
+
+    }
+
     public void setRelease_date(Date release_date) {
         this.release_date = release_date;
     }
@@ -162,7 +188,7 @@ public class MovieItem implements Parcelable {
         dest.writeInt(this.vote_count);
         dest.writeInt(this.id);
         dest.writeByte(this.video ? (byte) 1 : (byte) 0);
-        dest.writeFloat(this.vote_avarage);
+        dest.writeFloat(this.vote_average);
         dest.writeInt(this.popularity);
         dest.writeString(this.poster_path);
         dest.writeString(this.original_language);
@@ -178,7 +204,7 @@ public class MovieItem implements Parcelable {
         this.vote_count = in.readInt();
         this.id = in.readInt();
         this.video = in.readByte() != 0;
-        this.vote_avarage = in.readFloat();
+        this.vote_average = in.readFloat();
         this.popularity = in.readInt();
         this.poster_path = in.readString();
         this.original_language = in.readString();

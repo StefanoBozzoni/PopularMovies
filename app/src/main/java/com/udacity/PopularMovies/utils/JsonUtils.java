@@ -3,9 +3,8 @@ package com.udacity.PopularMovies.utils;
 import android.net.Uri;
 import android.util.Log;
 
-import com.udacity.PopularMovies.MainActivity;
+import com.udacity.PopularMovies.BuildConfig;
 import com.udacity.PopularMovies.model.MovieItem;
-import com.udacity.PopularMovies.model.Sandwich;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,13 +20,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 import static java.nio.file.Paths.get;
 
 public class JsonUtils {
     private static final String TAG = "JSonUtils";
-
 
     /**
      * This method returns the entire result from the HTTP response.
@@ -59,8 +58,7 @@ public class JsonUtils {
     public final static String POSTER_BASE_URL  = "http://image.tmdb.org/t/p/w500/";
 
     final static String PARAM_QUERY = "api_key";
-    final static String API_KEY = "759edfb4826fc71c6b51006513f19743";
-
+    final static String API_KEY = BuildConfig.MOVIEDB_API_KEY;
     /**
      * Builds the URL used to query MovieDB.
      *
@@ -92,19 +90,20 @@ public class JsonUtils {
             MovieItem[] movies = new MovieItem[num_movies];
             for (int i=0;i<num_movies;i++) {
               JSONObject aMovieItem     = arrayJsonRoot.getJSONObject(i);
-              int id                    = getJsonInt(aMovieItem         ,"id");
-              int vote_count            = getJsonInt(aMovieItem         ,"vote_count");
-              boolean video             = getJsonBoolean(aMovieItem     ,"video");
-              int popularity            = getJsonInt(aMovieItem         ,"popularity");
-              String poster_path        = getJsonString(aMovieItem      ,"poster_path");
-              String original_language  = getJsonString(aMovieItem      ,"original_language");
-              String original_title     = getJsonString(aMovieItem      ,"original_title");
-              List<Integer> genre_ids   = getJsonIntegerList(aMovieItem ,"genre_ids");
-              String backdrop_path      = getJsonString(aMovieItem      ,"backdrop_path");
-              boolean adult             = getJsonBoolean(aMovieItem     ,"adult");
-              String overview           = getJsonString(aMovieItem      ,"overview");
-              Date release_date         = getJsonDate(aMovieItem        ,"release_date");
-              movies[i] = new MovieItem(id,vote_count,video,popularity,poster_path,original_language,original_title,genre_ids,
+              int id                    = getJsonInt(aMovieItem         , MovieItem.id_Json);
+              int vote_count            = getJsonInt(aMovieItem         , MovieItem.vote_count_Json);
+              float vote_avarage        = getJsonFloat(aMovieItem       ,MovieItem.vote_average_Json);
+              boolean video             = getJsonBoolean(aMovieItem     ,MovieItem.video_Json);
+              int popularity            = getJsonInt(aMovieItem         ,MovieItem.popularity_Json);
+              String poster_path        = getJsonString(aMovieItem      ,MovieItem.poster_path_Json);
+              String original_language  = getJsonString(aMovieItem      ,MovieItem.original_language_Json);
+              String original_title     = getJsonString(aMovieItem      ,MovieItem.original_title_Json);
+              List<Integer> genre_ids   = getJsonIntegerList(aMovieItem ,MovieItem.genre_ids_Json);
+              String backdrop_path      = getJsonString(aMovieItem      ,MovieItem.backdrop_path_Json);
+              boolean adult             = getJsonBoolean(aMovieItem     ,MovieItem.adult_Json);
+              String overview           = getJsonString(aMovieItem      ,MovieItem.overview_Json);
+              Date release_date         = getJsonDate(aMovieItem        ,MovieItem.release_date_Json);
+              movies[i] = new MovieItem(id,vote_count,vote_avarage,video,popularity,poster_path,original_language,original_title,genre_ids,
               backdrop_path,adult,overview,release_date);
             }
             return movies;
@@ -128,6 +127,10 @@ public class JsonUtils {
         return pJson.getBoolean(propertyName);
     }
 
+    public static float getJsonFloat(JSONObject pJson, String propertyName) throws JSONException  {
+        return Float.valueOf(pJson.getString(propertyName));
+    }
+
     public static JSONObject getJsonObject(JSONObject pJson,String propertyName) throws JSONException  {
         return pJson.getJSONObject(propertyName);
     }
@@ -144,7 +147,7 @@ public class JsonUtils {
     public static Date getJsonDate(JSONObject pJson,String propertyName) throws JSONException  {
 
         String release_date_str   = getJsonString(pJson      ,propertyName);
-        SimpleDateFormat sdf      = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf      = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date release_date = null;
         try {
             release_date = sdf.parse(release_date_str);
