@@ -2,10 +2,6 @@ package com.udacity.PopularMovies;
 
 import android.app.Application;
 
-/**
- * Created by stefa on 01/03/2018.
- */
-
 public class MyApplication extends Application {
     private boolean isJustStarted;
 
