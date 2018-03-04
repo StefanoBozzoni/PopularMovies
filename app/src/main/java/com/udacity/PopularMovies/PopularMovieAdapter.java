@@ -1,17 +1,12 @@
 package com.udacity.PopularMovies;
 
 import android.content.Context;
-//import android.support.v7.widget.RecyclerView;
-import com.udacity.PopularMovies.MyRecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
-
 import com.squareup.picasso.Picasso;
 import com.udacity.PopularMovies.model.MovieItem;
 import com.udacity.PopularMovies.utils.JsonUtils;
@@ -52,6 +47,7 @@ public class PopularMovieAdapter extends MyRecyclerView.Adapter<PopularMovieAdap
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             MovieItem thisMovie = moviesData[adapterPosition];
+            //ImageView iv = (ImageView) v.findViewById(R.id.imageView_pm);
             mClickHandler.onClick(v,thisMovie);
         }
 
@@ -72,8 +68,7 @@ public class PopularMovieAdapter extends MyRecyclerView.Adapter<PopularMovieAdap
         rcContext=context;
         int layoutIdForMovies = R.layout.popular_movies;
         LayoutInflater inflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
-        View view = inflater.inflate(layoutIdForMovies, parent, shouldAttachToParentImmediately);
+        View view = inflater.inflate(layoutIdForMovies, parent, false);
         return new PMViewHolder(view);
     }
 

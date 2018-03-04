@@ -2,7 +2,6 @@ package com.udacity.PopularMovies.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,8 +39,7 @@ public class MovieItem implements Parcelable {
     private Date release_date;
 
     public MovieItem() {
-
-    };
+    }
 
     public MovieItem(int id, int vote_count, float vote_average, boolean video, int popularity, String poster_path,
                      String original_language, String original_title, List<Integer> genre_ids,
@@ -117,9 +115,8 @@ public class MovieItem implements Parcelable {
         this.original_language = original_language;
     }
 
-    @Nullable
     public String getOriginal_title() {
-        return original_title;
+        return (original_title == null ? "" : original_title);
     }
 
     public void setOriginal_title(String original_title) {

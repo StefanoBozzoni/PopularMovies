@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-import static java.nio.file.Paths.get;
-
 public class JsonUtils {
     private static final String TAG = "JSonUtils";
 
@@ -90,9 +88,9 @@ public class JsonUtils {
             MovieItem[] movies = new MovieItem[num_movies];
             for (int i=0;i<num_movies;i++) {
               JSONObject aMovieItem     = arrayJsonRoot.getJSONObject(i);
-              int id                    = getJsonInt(aMovieItem         , MovieItem.id_Json);
-              int vote_count            = getJsonInt(aMovieItem         , MovieItem.vote_count_Json);
-              float vote_avarage        = getJsonFloat(aMovieItem       ,MovieItem.vote_average_Json);
+              int id                    = getJsonInt(aMovieItem         ,MovieItem.id_Json);
+              int vote_count            = getJsonInt(aMovieItem         ,MovieItem.vote_count_Json);
+              float vote_average        = getJsonFloat(aMovieItem       ,MovieItem.vote_average_Json);
               boolean video             = getJsonBoolean(aMovieItem     ,MovieItem.video_Json);
               int popularity            = getJsonInt(aMovieItem         ,MovieItem.popularity_Json);
               String poster_path        = getJsonString(aMovieItem      ,MovieItem.poster_path_Json);
@@ -103,7 +101,7 @@ public class JsonUtils {
               boolean adult             = getJsonBoolean(aMovieItem     ,MovieItem.adult_Json);
               String overview           = getJsonString(aMovieItem      ,MovieItem.overview_Json);
               Date release_date         = getJsonDate(aMovieItem        ,MovieItem.release_date_Json);
-              movies[i] = new MovieItem(id,vote_count,vote_avarage,video,popularity,poster_path,original_language,original_title,genre_ids,
+              movies[i] = new MovieItem(id,vote_count,vote_average,video,popularity,poster_path,original_language,original_title,genre_ids,
               backdrop_path,adult,overview,release_date);
             }
             return movies;
@@ -131,9 +129,6 @@ public class JsonUtils {
         return Float.valueOf(pJson.getString(propertyName));
     }
 
-    public static JSONObject getJsonObject(JSONObject pJson,String propertyName) throws JSONException  {
-        return pJson.getJSONObject(propertyName);
-    }
 
     public static List<Integer> getJsonIntegerList(JSONObject pJson, String propertyName) throws JSONException  {
         List<Integer> aList = new ArrayList<Integer>();

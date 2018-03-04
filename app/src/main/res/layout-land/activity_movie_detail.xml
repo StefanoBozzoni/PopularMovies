@@ -28,7 +28,7 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="@dimen/margin16dp"
                 android:layout_marginRight="@dimen/margin16dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:contentDescription="@string/poster_image_description"
                 android:transitionName="@string/transition_string" tools:targetApi="21"/>
                 <include layout="@layout/rightpane_layout" />

@@ -1,13 +1,13 @@
 package com.udacity.PopularMovies;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.NavUtils;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,29 +16,33 @@ import com.squareup.picasso.Picasso;
 import com.udacity.PopularMovies.model.MovieItem;
 import com.udacity.PopularMovies.utils.JsonUtils;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MovieDetailActivity extends AppCompatActivity {
 
-    public static final String MOVIE_OBJ_EXTRA = "ARRAY";
-    private final String TAG = MovieDetailActivity.class.getSimpleName();
+    public static final String MOVIE_OBJ_EXTRA = "MOVIES_ARR";
 
-    private ImageView m_poster;
-    private TextView  m_title;
-    private TextView  m_releaseDate;
-    private TextView  m_voteAverage;
-    private TextView  m_overview;
-    private RatingBar m_voterAverage;
+    @BindView(R.id.moviePoster)       ImageView m_poster;
+    @BindView(R.id.title_tv)          TextView  m_title;
+    @BindView(R.id.date_released_tv)  TextView  m_releaseDate;
+    @BindView(R.id.vote_average_tv)   TextView  m_voteAverage;
+    @BindView(R.id.overview_tv)       TextView  m_overview;
+    @BindView(R.id.voter_average)     RatingBar m_voterAverage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_detail);
 
-        m_poster = (ImageView)findViewById(R.id.moviePoster);
-        m_title = (TextView)findViewById(R.id.title_tv);
-        m_releaseDate = (TextView)findViewById(R.id.date_released_tv);
-        m_voteAverage = (TextView)findViewById(R.id.vote_average_tv);
-        m_overview = (TextView)findViewById(R.id.overview_tv);
-        m_voterAverage = (RatingBar)findViewById(R.id.voter_average);
+        setContentView(R.layout.activity_movie_detail);
+        ButterKnife.bind(this);
+
+        //Disable rotation because animation would be wrong returning back to mainactivity
+        int orientation = this.getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT)
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        else
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         Intent intent = getIntent();
         if ((intent.getExtras()!=null) && (intent.hasExtra(MOVIE_OBJ_EXTRA))) {
