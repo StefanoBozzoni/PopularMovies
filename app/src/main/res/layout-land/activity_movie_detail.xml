@@ -20,7 +20,7 @@
             android:id="@+id/detaillayout"
             android:orientation  ="horizontal"
             android:layout_height="wrap_content"
-            android:minHeight="150dp"
+            android:minHeight="@dimen/min_landscape_img_height"
             android:layout_width ="match_parent">
 
             <ImageView
