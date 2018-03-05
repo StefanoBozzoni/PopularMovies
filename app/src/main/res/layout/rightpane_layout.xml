@@ -11,12 +11,14 @@
 
     <TextView
         android:id="@+id/title_tv"
-        android:textSize="@dimen/size30sp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:textSize="@dimen/size30sp"
+        tools:contentDescription="title_tv" />
 
     <TextView
         android:id="@+id/date_released_tv"
+        tools:contentDescription="date_release_tv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textSize="@dimen/size22dp" />
@@ -26,6 +28,7 @@
         style="?android:attr/ratingBarStyleSmall"
         android:numStars="10"
         android:max="10"
+        tools:contentDescription="voter_average"
         android:layout_marginRight="@dimen/margin2dp"
         android:layout_marginEnd="@dimen/margin2dp"
         android:layout_width="wrap_content"
@@ -33,6 +36,7 @@
 
     <TextView
         android:id="@+id/vote_average_tv"
+        tools:contentDescription="voter_average_tv"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

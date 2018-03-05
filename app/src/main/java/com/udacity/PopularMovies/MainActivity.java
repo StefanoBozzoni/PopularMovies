@@ -247,8 +247,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onConfigurationChanged(Configuration newConfig)
     {
-        super.onConfigurationChanged(newConfig);
 
+        super.onConfigurationChanged(newConfig);
         int orientation = newConfig.orientation;
         int spanCount=((orientation == Configuration.ORIENTATION_PORTRAIT) ? GRID_SPAN_COUNT_PORTRAIT:GRID_SPAN_COUNT_LANDSCAPE);
         MyRecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, spanCount);

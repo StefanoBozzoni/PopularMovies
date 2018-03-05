@@ -20,6 +20,7 @@
             android:id="@+id/detaillayout"
             android:orientation  ="horizontal"
             android:layout_height="wrap_content"
+            android:minHeight="150dp"
             android:layout_width ="match_parent">
 
             <ImageView

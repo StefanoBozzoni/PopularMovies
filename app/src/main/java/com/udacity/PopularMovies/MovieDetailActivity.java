@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Surface;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,19 +31,29 @@ public class MovieDetailActivity extends AppCompatActivity {
     @BindView(R.id.overview_tv)       TextView  m_overview;
     @BindView(R.id.voter_average)     RatingBar m_voterAverage;
 
+    private static final int ORIENTATION_90 = 1;
+    private static final int ORIENTATION_0 = 0;
+    private static final int ORIENTATION_180 = 2;
+    private static final int ORIENTATION_270 = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         setContentView(R.layout.activity_movie_detail);
         ButterKnife.bind(this);
 
         //Disable rotation because animation would be wrong returning back to mainactivity
         int orientation = this.getResources().getConfiguration().orientation;
+        final int rotation = this.getWindowManager().getDefaultDisplay().getOrientation();
+
         if (orientation == Configuration.ORIENTATION_PORTRAIT)
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        else
+        if (rotation == Surface.ROTATION_180)
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        if (orientation==Surface.ROTATION_270)
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
 
         Intent intent = getIntent();
         if ((intent.getExtras()!=null) && (intent.hasExtra(MOVIE_OBJ_EXTRA))) {
