@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity
     private static final String MOST_POPULAR_QUERY_TAG   ="popular";
     private static final String TOP_RATED_QUERY_TAG      ="top_rated";
     private static final String MENU_FILTER_TAG          = "used_filter_choice";
+    private static final String RECYCLER_VIEW_STATE      = "RecyclerView-State";
     private static final int GRID_SPAN_COUNT_LANDSCAPE   = 5;
     private static final int GRID_SPAN_COUNT_PORTRAIT    = 3;
 
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable("RecyclerView-State",mRecyclerViewState);
+        outState.putParcelable(RECYCLER_VIEW_STATE,mRecyclerViewState);
         super.onSaveInstanceState(outState);
     }
 
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         // Always call the superclass so it can restore the view hierarchy
         super.onRestoreInstanceState(savedInstanceState);
-        mRecyclerViewState=savedInstanceState.getParcelable("RecyclerView-State");
+        mRecyclerViewState=savedInstanceState.getParcelable(RECYCLER_VIEW_STATE);
     }
 
     @Override
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState!=null)
-           mRecyclerViewState=savedInstanceState.getParcelable("RecyclerView-State");
+           mRecyclerViewState=savedInstanceState.getParcelable(RECYCLER_VIEW_STATE);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -247,12 +248,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onConfigurationChanged(Configuration newConfig)
     {
-
+        Parcelable savedState=myRecyclerView.onSaveInstanceState();
         super.onConfigurationChanged(newConfig);
         int orientation = newConfig.orientation;
         int spanCount=((orientation == Configuration.ORIENTATION_PORTRAIT) ? GRID_SPAN_COUNT_PORTRAIT:GRID_SPAN_COUNT_LANDSCAPE);
         MyRecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, spanCount);
         myRecyclerView.setLayoutManager(layoutManager);
+        myRecyclerView.onRestoreInstanceState(savedState);
     }
 
 }

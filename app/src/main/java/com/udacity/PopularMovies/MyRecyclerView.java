@@ -16,9 +16,9 @@ import android.util.AttributeSet;
  */
 
 public class MyRecyclerView extends RecyclerView {
-    static final String SAVED_SUPER_STATE="SAVED_SUPER_STATE";
+    static final String SAVED_SUPER_STATE   ="SAVED_SUPER_STATE";
     static final String SAVED_LAYOUT_MANAGER="SAVED_LAYOUT_MANAGER";
-    static final String PREF_TAG_PRFX="MyRecyclerViewScrollPos";
+    static final String PREF_TAG_PRFX       ="MyRecyclerViewScrollPos";
 
     private Parcelable mLayoutManagerSavedState;
 
