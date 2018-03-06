@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
         <activity android:name      ="com.udacity.PopularMovies.MainActivity"
                   android:launchMode="singleTop"
-                  android:configChanges="orientation|screenSize">
+            >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -64,10 +64,13 @@ public class MyRecyclerView extends RecyclerView {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
         int lastFirstVisiblePosition = prefs.getInt(getRVTag(), -1);
         if (lastFirstVisiblePosition != -1) {
+            lastFirstVisiblePosition=15;
             if (lm instanceof GridLayoutManager)
                 ((GridLayoutManager) this.getLayoutManager()).scrollToPositionWithOffset(lastFirstVisiblePosition, 0);
-            if (lm instanceof LinearLayoutManager)
-                ((LinearLayoutManager) this.getLayoutManager()).scrollToPositionWithOffset(lastFirstVisiblePosition, 0);
+            else
+                if (lm instanceof LinearLayoutManager)
+                    ((LinearLayoutManager) this.getLayoutManager()).scrollToPositionWithOffset(lastFirstVisiblePosition, 0);
+
         }
     }
 

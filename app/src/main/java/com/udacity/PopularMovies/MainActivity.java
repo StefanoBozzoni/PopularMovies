@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity
     public Loader<MovieItem[]> onCreateLoader(int id, final Bundle args) {
         return new AsyncTaskLoader<MovieItem[]>(this) {
             MovieItem[] mMovies = null;
+
             @Override
             protected void onStartLoading() {
                 myProgressBar.setVisibility(View.VISIBLE);
@@ -191,7 +192,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-
     @Override
     public void onClick(View viewStart, MovieItem aMovie) {
         //doesn't need anymore: myRecyclerView.storeScrollPosition();
@@ -242,19 +242,6 @@ public class MainActivity extends AppCompatActivity
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit().putString(MENU_FILTER_TAG, menuActivated).apply();
-    }
-
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig)
-    {
-        Parcelable savedState=myRecyclerView.onSaveInstanceState();
-        super.onConfigurationChanged(newConfig);
-        int orientation = newConfig.orientation;
-        int spanCount=((orientation == Configuration.ORIENTATION_PORTRAIT) ? GRID_SPAN_COUNT_PORTRAIT:GRID_SPAN_COUNT_LANDSCAPE);
-        MyRecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, spanCount);
-        myRecyclerView.setLayoutManager(layoutManager);
-        myRecyclerView.onRestoreInstanceState(savedState);
     }
 
 }
