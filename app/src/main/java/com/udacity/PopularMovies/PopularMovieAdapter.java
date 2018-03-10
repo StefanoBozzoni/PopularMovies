@@ -47,8 +47,8 @@ public class PopularMovieAdapter extends MyRecyclerView.Adapter<PopularMovieAdap
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             MovieItem thisMovie = moviesData[adapterPosition];
-            //ImageView iv = (ImageView) v.findViewById(R.id.imageView_pm);
-            mClickHandler.onClick(v,thisMovie);
+            ImageView iv = (ImageView) v.findViewById(R.id.imageView_pm);
+            mClickHandler.onClick(iv,thisMovie);
         }
 
 

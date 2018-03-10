@@ -45,8 +45,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //Disable rotation because animation would be wrong returning back to mainactivity
+        /*
         int orientation = this.getResources().getConfiguration().orientation;
-        final int rotation = this.getWindowManager().getDefaultDisplay().getOrientation();
+        final int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
 
         if (orientation == Configuration.ORIENTATION_PORTRAIT)
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -54,6 +55,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         if (orientation==Surface.ROTATION_270)
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+        */
 
         Intent intent = getIntent();
         if ((intent.getExtras()!=null) && (intent.hasExtra(MOVIE_OBJ_EXTRA))) {

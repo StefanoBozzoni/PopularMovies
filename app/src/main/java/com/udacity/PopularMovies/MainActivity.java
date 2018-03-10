@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.LoaderManager;
@@ -15,6 +17,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 
+import android.transition.Explode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,13 +31,15 @@ import java.net.URL;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.view.Window.FEATURE_CONTENT_TRANSITIONS;
+
 public class MainActivity extends AppCompatActivity
          implements PopularMovieAdapter.PopularMovieAdapterOnClickHandler,
                     LoaderManager.LoaderCallbacks<MovieItem[]> {
 
     private PopularMovieAdapter mPopularMovieAdapter;
     private Parcelable mRecyclerViewState;
-    @BindView(R.id.movies_rv)   MyRecyclerView myRecyclerView;
+    @BindView(R.id.movies_rv) MyRecyclerView myRecyclerView;
     @BindView(R.id.progressBar) ProgressBar myProgressBar;
 
     private static final int    MOVIEDB_SEARCH_LOADER_ID = 25;
@@ -49,9 +54,12 @@ public class MainActivity extends AppCompatActivity
     private Menu mMenu;
     private boolean appIsLaunched;
 
+
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(RECYCLER_VIEW_STATE,mRecyclerViewState);
+        mRecyclerViewState = myRecyclerView.onSaveInstanceState();
+        outState.putParcelable(RECYCLER_VIEW_STATE, mRecyclerViewState);
         super.onSaveInstanceState(outState);
     }
 
@@ -60,17 +68,17 @@ public class MainActivity extends AppCompatActivity
         // Always call the superclass so it can restore the view hierarchy
         super.onRestoreInstanceState(savedInstanceState);
         mRecyclerViewState=savedInstanceState.getParcelable(RECYCLER_VIEW_STATE);
+        myRecyclerView.onRestoreInstanceState(mRecyclerViewState);
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (savedInstanceState!=null)
-           mRecyclerViewState=savedInstanceState.getParcelable(RECYCLER_VIEW_STATE);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        //if (savedInstanceState!=null)
+        //    mRecyclerViewState=savedInstanceState.getParcelable(RECYCLER_VIEW_STATE);
         int orientation=this.getResources().getConfiguration().orientation;
         int spanCount=((orientation == Configuration.ORIENTATION_PORTRAIT) ? GRID_SPAN_COUNT_PORTRAIT : GRID_SPAN_COUNT_LANDSCAPE);
         MyRecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, spanCount);
@@ -192,15 +200,24 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onClick(View viewStart, MovieItem aMovie) {
         //doesn't need anymore: myRecyclerView.storeScrollPosition();
         Intent intent = new Intent(this, MovieDetailActivity.class);
         intent.putExtra(MovieDetailActivity.MOVIE_OBJ_EXTRA,aMovie);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        String transitionName=getString(R.string.transition_string);
-        ActivityOptionsCompat options=ActivityOptionsCompat.makeSceneTransitionAnimation(this,viewStart,transitionName);
-        ActivityCompat.startActivity(this,intent,options.toBundle());
+
+
+        //String transitionName=getString(R.string.transition_string);
+        //ActivityOptionsCompat options=ActivityOptionsCompat.makeSceneTransitionAnimation(this,viewStart,transitionName);
+        //ActivityCompat.startActivity(this,intent,options.toBundle());
+
+        //inside your activity (if you did not enable transitions in your theme)
+        //not working: this.getWindow().requestFeature(FEATURE_CONTENT_TRANSITIONS);
+        this.getWindow().setExitTransition(new Explode());
+        startActivity(intent);
+        //startActivity(intent,options.toBundle());
     }
 
     @Override
